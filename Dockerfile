@@ -8,13 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN yarn install
+RUN yarn -q install --production=false --silent && \
+yarn run build && \
+yarn -q install --production=true --silent && \
+yarn cache clean
 
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose the port on which the Node.js application will run
-EXPOSE 3000
-
 # Command to run the Node.js application
-CMD ["node", "server.ts"] 
+CMD ["yarn", "run", "dev"] 
