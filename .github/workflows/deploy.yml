@@ -1,0 +1,40 @@
+name: Build and Deploy to K3s
+
+# ทำงานเมื่อมีการ Push โค้ดเข้ากิ่ง main เท่านั้น
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # เปลี่ยนชื่อเป็นโปรเจกต์ของคุณ
+  IMAGE_NAME: test-ci
+  DEPLOYMENT_NAME: test-ci # ชื่อ Deployment ในไฟล์ YAML ของคุณ
+  NAMESPACE: kite-system
+
+jobs:
+  build-and-deploy:
+    # 👇 บรรทัดนี้คือเวทมนตร์! บอกให้ GitHub ส่งงานมาทำที่เครื่อง Fedora ของเรา
+    runs-on: self-hosted 
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐳 Build Image with Podman
+        run: |
+          podman build -t $IMAGE_NAME:${{ github.sha }} .
+          
+      - name: 📦 Import Image to K3s Containerd
+        run: |
+          podman save -o image.tar $IMAGE_NAME:${{ github.sha }}
+          sudo k3s ctr images import image.tar
+          rm image.tar
+
+      - name: 🚀 Deploy to Local K3s
+        run: |
+          # สั่ง K3s ให้เปลี่ยน Image เป็นตัวที่เราเพิ่ง Build เสร็จ
+          kubectl set image deployment/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$IMAGE_NAME:${{ github.sha }} -n $NAMESPACE
+          
+          # รอจนกว่า Pod ใหม่จะรันเสร็จ (ถ้ารันไม่ขึ้น Pipeline จะฟ้องว่า Failed)
+          kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
