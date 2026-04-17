@@ -4,7 +4,7 @@
     "dev": "nodemon src/server.ts"
   },
   "dependencies": {
-    "@apollo/server": "^4.1.1",
+    "@apollo/server": "^5.5.0",
     "@graphql-tools/schema": "^9.0.10",
     "axios": "^1.6.8",
     "body-parser": "^1.20.1",
@@ -14,7 +14,7 @@
     "graphql-subscriptions": "^2.0.0",
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.11.2",
-    "nodemon": "^2.0.20",
+    "nodemon": "^3.1.14",
     "ts-node": "^10.9.1",
     "typescript": "^5.4.2",
     "ws": "^8.11.0"
