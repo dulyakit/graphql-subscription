@@ -8,6 +8,9 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import schema from './schema'
 
+// แกล้งใส่รหัสผ่านหลุดไว้
+const DB_PASSWORD = "super-secret-password-12345";
+
 const initApollo = async () => {
   const app = express()
   const httpServer = createServer(app)
