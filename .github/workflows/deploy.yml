@@ -1,20 +1,17 @@
 name: Build and Deploy to K3s
 
-# ทำงานเมื่อมีการ Push โค้ดเข้ากิ่ง main เท่านั้น
 on:
   push:
     branches:
       - main
 
 env:
-  # เปลี่ยนชื่อเป็นโปรเจกต์ของคุณ
   IMAGE_NAME: test-ci
-  DEPLOYMENT_NAME: test-ci # ชื่อ Deployment ในไฟล์ YAML ของคุณ
+  DEPLOYMENT_NAME: test-ci
   NAMESPACE: kite-system
 
 jobs:
   build-and-deploy:
-    # 👇 บรรทัดนี้คือเวทมนตร์! บอกให้ GitHub ส่งงานมาทำที่เครื่อง Fedora ของเรา
     runs-on: self-hosted 
 
     steps:

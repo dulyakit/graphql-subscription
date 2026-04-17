@@ -10,7 +10,6 @@ import schema from './schema'
 
 const initApollo = async () => {
   const app = express()
-
   const httpServer = createServer(app)
 
   const wsServer = new WebSocketServer({
