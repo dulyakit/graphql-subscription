@@ -1,5 +1,5 @@
 # 1. Base Stage
-FROM docker.io/oven/bun:alpine AS base
+FROM docker.io/oven/bun:1.3 AS base
 WORKDIR /usr/src/app
 COPY . .
 
@@ -25,7 +25,7 @@ FROM base AS production-dependencies
 RUN bun install --production --ignore-scripts
 
 # 7. Release Stage
-FROM node:22.18-alpine AS release
+FROM node:25.9.0-alpine3.22 AS release
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/dist dist
