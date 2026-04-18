@@ -2,8 +2,8 @@ import express from 'express'
 import { createServer } from 'http'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { ApolloServer } from '@apollo/server'
-import { expressMiddleware } from '@apollo/server/express4'
+import { ApolloServer } from '@apollo/server' // ยังคงใช้ @apollo/server สำหรับ ApolloServer
+import { expressMiddleware } from '@as-integrations/express4' // เปลี่ยนไปใช้แพ็กเกจการรวมแยกต่างหาก
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import schema from './schema'
