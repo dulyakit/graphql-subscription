@@ -1,37 +1,37 @@
-name: Build and Deploy to K3s
+# name: Build and Deploy to K3s
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-env:
-  IMAGE_NAME: test-ci
-  DEPLOYMENT_NAME: test-ci
-  NAMESPACE: kite-system
+# env:
+#   IMAGE_NAME: test-ci
+#   DEPLOYMENT_NAME: test-ci
+#   NAMESPACE: kite-system
 
-jobs:
-  build-and-deploy:
-    runs-on: self-hosted 
+# jobs:
+#   build-and-deploy:
+#     runs-on: self-hosted 
 
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: 📥 Checkout Code
+#         uses: actions/checkout@v4
 
-      - name: 🐳 Build Image with Podman
-        run: |
-          podman build -t $IMAGE_NAME:${{ github.sha }} .
+#       - name: 🐳 Build Image with Podman
+#         run: |
+#           podman build -t $IMAGE_NAME:${{ github.sha }} .
           
-      - name: 📦 Import Image to K3s Containerd
-        run: |
-          podman save -o image.tar $IMAGE_NAME:${{ github.sha }}
-          sudo k3s ctr images import image.tar
-          rm image.tar
+#       - name: 📦 Import Image to K3s Containerd
+#         run: |
+#           podman save -o image.tar $IMAGE_NAME:${{ github.sha }}
+#           sudo k3s ctr images import image.tar
+#           rm image.tar
 
-      - name: 🚀 Deploy to Local K3s
-        run: |
-          # สั่ง K3s ให้เปลี่ยน Image เป็นตัวที่เราเพิ่ง Build เสร็จ
-          kubectl set image deployment/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$IMAGE_NAME:${{ github.sha }} -n $NAMESPACE
+#       - name: 🚀 Deploy to Local K3s
+#         run: |
+#           # สั่ง K3s ให้เปลี่ยน Image เป็นตัวที่เราเพิ่ง Build เสร็จ
+#           kubectl set image deployment/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$IMAGE_NAME:${{ github.sha }} -n $NAMESPACE
           
-          # รอจนกว่า Pod ใหม่จะรันเสร็จ (ถ้ารันไม่ขึ้น Pipeline จะฟ้องว่า Failed)
-          kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
+#           # รอจนกว่า Pod ใหม่จะรันเสร็จ (ถ้ารันไม่ขึ้น Pipeline จะฟ้องว่า Failed)
+#           kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
